@@ -2,7 +2,7 @@ const router = require('express').Router();
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const Users = require('../users/users-module.js');
+const Users = require('../users/users-model.js');
 const { isValid } = require('../users/users-service.js');
 const { BCRYPT_ROUNDS, JWT_SECRET } = process.env;
 
