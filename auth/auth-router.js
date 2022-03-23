@@ -18,7 +18,7 @@ router.post('/register', async (req, res, next) => {
 
   // Securing password
   const rounds = BCRYPT_ROUNDS ? parseInt(BCRYPT_ROUNDS) : 10;
-  const hash = bcryptjs.hashSync(user.password, rounds);
+  const hash = await bcryptjs.hash(user.password, rounds);
   user.password = hash;
 
   // Validating user
@@ -38,25 +38,24 @@ router.post('/register', async (req, res, next) => {
         apiMessage: 'name, email or password missing',
       });
     }
-  } catch (error) {
-    next({ apiCode: 500, apiMessage: 'error saving new user', ...error });
+  } catch (err) {
+    next({ apiCode: 500, apiMessage: 'error saving new user', ...err });
   }
 });
 
 // Login user
 router.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
+  const user = await Users.findBy({ email }).first();
 
   // Validating user
   try {
     // Checking if user is valid
-    if (!isValid(req.body)) {
+    if (!isValid({ email, password })) {
       next({ apiCode: 400, apiMessage: 'email or password invalid' });
     } else {
-      const user = await Users.findBy({ email }).first();
-
       // checking if user and password match
-      if (user && bcryptjs.compareSync(password, user.password)) {
+      if (await bcryptjs.compare(password, user.password)) {
         const token = generateToken(user);
 
         res.status(200).json({
@@ -72,8 +71,8 @@ router.post('/login', async (req, res, next) => {
         next({ apiCode: 401, apiMessage: 'invalid credentials' });
       }
     }
-  } catch (error) {
-    next({ apiCode: 500, apiMessage: 'db error logging in', ...error });
+  } catch (err) {
+    next({ apiCode: 500, apiMessage: err, ...err });
   }
 });
 
@@ -89,7 +88,7 @@ function generateToken(user) {
 
   // Set expiration to 1 day
   const options = {
-    expires: '1d',
+    expiresIn: '1d',
   };
 
   //Constructing Token
