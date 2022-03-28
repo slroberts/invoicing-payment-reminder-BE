@@ -1,32 +1,31 @@
 exports.seed = function (knex) {
-  // Inserts seed entries
   return knex('clients').insert([
     {
       id: 1,
-      client_name: 'John Doe',
-      client_email: 'johndoe@test.com',
-      client_number: '111111111',
+      name: 'Test Company',
+      email: 'test@company.com',
+      phone: '212-212-2211',
       user_id: 1,
     },
     {
       id: 2,
-      client_name: 'Jane Doe',
-      client_email: 'janedoe@test.com',
-      client_number: '3323454567',
+      name: 'Company',
+      email: 't@company.com',
+      phone: '333-212-2211',
       user_id: 1,
     },
     {
       id: 3,
-      client_name: 'Nobody Doe',
-      client_email: 'nobodydoe@test.com',
-      client_number: '8900987765',
+      name: 'Test Company',
+      email: 'test@company.com',
+      phone: '212-212-2211',
       user_id: 2,
     },
     {
       id: 4,
-      client_name: 'John Doe',
-      client_email: 'johndoe@test.com',
-      client_number: '111111111',
+      name: 'Test Company',
+      email: 'test@company.com',
+      phone: '212-212-2211',
       user_id: 2,
     },
   ]);
